@@ -1,11 +1,9 @@
-//=====Link of the project: www.makerchip.com/sandbox/0o2fXho92/0X6hXxw====//
+\m4_TLV_version 1d: tl-x.org
 
 //=================================================//
 //=============Pythogoras Theorem==================//
 //=================================================//
 
-
-\m4_TLV_version 1d: tl-x.org
 \SV
    `include "sqrt32.v";
    
