@@ -1,5 +1,9 @@
 The link for the lab work is given below:
 
 Links:
-[Combinational Calculator](https://www.makerchip.com/sandbox/0jRfjhnQv/0JZhqnj)
-[Fibonacci Sequence Generator](https://www.makerchip.com/sandbox/0jRfjhnQv/0O7hpk5)
+
+
+|S NO.| Lab Name | Link for the assignment |
+|-----|----------|-------------------------|
+| 1. |Combinational Calculator | [Combinational Calculator in Makerchip](https://www.makerchip.com/sandbox/0jRfjhnQv/0JZhqnj)|
+|2. | Fibonacci Sequence Generator|[Fibonacci Sequence Generator in Makerchip](https://www.makerchip.com/sandbox/0jRfjhnQv/0O7hpk5)|
