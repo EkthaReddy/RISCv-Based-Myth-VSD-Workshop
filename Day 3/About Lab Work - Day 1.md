@@ -13,3 +13,4 @@ Links:
 |6.| Pipelined Sequential Calculator With Counter| [Pipelined Sequential Calculator With Counter in Makerchip](https://www.makerchip.com/sandbox/0jRfjhnQv/02RhpQo)|
 |7.| Pipelined Sequential Calculator With Counter - with 3nd stage| [Pipelined Sequential Calculator With Counter - with 3nd stage](https://www.makerchip.com/sandbox/0jRfjhnQv/03lhpv8)|
 |8.| Counter| |
+|9.| Pythagoras Theorem 3 Dimensional|[Pythagoras Theorem 3 Dimensional](https://www.makerchip.com/sandbox/0jRfjhnQv/066hrJO)|
