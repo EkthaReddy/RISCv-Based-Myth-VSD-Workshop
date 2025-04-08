@@ -11,3 +11,4 @@ Links:
 |4.| Sequential Calculator | [Sequential Calculator in Makerchip](https://www.makerchip.com/sandbox/0jRfjhnQv/0Z4h5Yz)|
 |5.| Pipeline Error Detector | [Pipeline Error Detector in Makerchip](https://www.makerchip.com/sandbox/0jRfjhnQv/01jhMXK)|
 |6.| Pipelined Sequential Calculator With Counter| [Pipelined Sequential Calculator With Counter in Makerchip](https://www.makerchip.com/sandbox/0jRfjhnQv/02RhpQo)|
+|7.| Pipelined Sequential Calculator With Counter - with 3nd stage| [Pipelined Sequential Calculator With Counter - with 3nd stage](https://www.makerchip.com/sandbox/0jRfjhnQv/03lhpv8)|
