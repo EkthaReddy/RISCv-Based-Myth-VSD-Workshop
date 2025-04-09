@@ -23,3 +23,4 @@ C program -> C code result -> compile into assembly language -> convert into mac
                                                      (HDL -> to create specification -> implement using RTL)
 ```
                                             
+![image](https://github.com/user-attachments/assets/2bcfd890-afaa-4502-a849-50668bfe66d8)
