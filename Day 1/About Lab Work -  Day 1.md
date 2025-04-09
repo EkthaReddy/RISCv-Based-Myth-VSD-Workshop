@@ -28,17 +28,28 @@ C program -> C code result -> compile into assembly language -> convert into mac
 
 To work on Virtual machine, open terminal and type the below instructions:
 
-Step 1:  `cd` i.e., cd or change directory, the cd command allows you to move between directories.
+ ``cd`` i.e., cd or change directory, the cd command allows you to move between directories. Download the leafpad for writing the c code. ``sudo apt install leafpad``.
 
-Step 2: download the leafpad for writing the c code. `sudo apt install leafpad`.
+ Type ``cd`` in new tab.
 
-Step 3: Type `cd` in new tab.
+``leafpad one_to_n_sum.c`` after writing the code on leafpad save it with `file_name`, here I have taken ``leafpad one_to_n_sum.c``.
+![Day1_c_code_one_to_n_sum](https://github.com/user-attachments/assets/64a357d1-8844-4dcd-ac22-0d11a3810b87)
 
-Step 4: `leafpad one_to_n_sum.c` after writing the code on leafpad save it with `file_name`, here I have taken `leafpad one_to_n_sum.c`.
+Provide ``gcc leafpad one_to_n_sum.c``. Write ``ls -ltr``, which is used in Unix/Linux terminals to list files and directories with specific options.
+To view the output use the command ``./a.out``
 
-Step 5: provide ` gcc leafpad one_to_n_sum.c`
+![Day1_one_to_n_sum_output](https://github.com/user-attachments/assets/7e43ee2e-5118-4586-bbca-8ed074ba790e)
 
-Step 6: Write `ls -ltr`, which is used in Unix/Linux terminals to list files and directories with specific options.
+Then type `cat one_to_n_sum.c`. The cat command reads each File parameter in sequence and writes it to standard output.
 
-Step 7: To view the output use the command `./a.out`
+Now, to compile it with RISCv, `riscv64-unknown-elf-gcc -o1 -mabi=lp64 -march=rv64i -o one_to_n_sum.o one_to_n_sum.c` then type `ls -ltr one_to_n_sum.c`
+![Day1_to_compile_c_code_riscv](https://github.com/user-attachments/assets/dae519df-9cba-47c1-a398-c5980cfffe4d)
 
+Lets type the command to get assembly code for the C code.
+`ricv64-unknown-elf-objdump -d one_to_n_sum.o` then type `ricv64-unknown-elf-objdump -d one_to_n_sum.o | less`
+This would open the main section of assembly code if not shown then type `/main` or/and press `n` in keypad
+
+To check the number of instruction instead of manully counting.
+Take the last instruction and subtract it with the 1st instruction then divide it by 4 to get the number of instruction.
+
+Take a look at the below picture, lets calculate the number of instruction:
