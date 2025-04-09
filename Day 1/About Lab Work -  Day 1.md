@@ -53,3 +53,9 @@ To check the number of instruction instead of manully counting.
 Take the last instruction and subtract it with the 1st instruction then divide it by 4 to get the number of instruction.
 
 Take a look at the below picture, lets calculate the number of instruction:
+![Screenshot (945)](https://github.com/user-attachments/assets/545e10a4-f097-4ca5-b85c-1b1a63376f2e)
+First let us add 1020c with 4 to see if the next instruction abtained is correct or not. So, as we see in the picture it is correct as it gives 10210
+![Screenshot (947)](https://github.com/user-attachments/assets/84a5fe8f-ba5c-4e56-8d63-bbfda4b8bcc5)
+Now, let us do the caculation.
+Take the last instruction 10210 subtract it with the fiest instruction 10184 we are getting 8c then divide 8c with four we get 35 instructions.
+i.e., ``` 10210-10184=8c ``` then ```8c/4=35 inst. ```
