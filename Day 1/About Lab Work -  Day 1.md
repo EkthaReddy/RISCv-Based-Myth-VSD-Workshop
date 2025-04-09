@@ -26,3 +26,19 @@ C program -> C code result -> compile into assembly language -> convert into mac
 ```
 
 
+To work on Virtual machine, open terminal and type the below instructions:
+
+Step 1:  `cd` i.e., cd or change directory, the cd command allows you to move between directories.
+
+Step 2: download the leafpad for writing the c code. `sudo apt install leafpad`.
+
+Step 3: Type `cd` in new tab.
+
+Step 4: `leafpad one_to_n_sum.c` after writing the code on leafpad save it with `file_name`, here I have taken `leafpad one_to_n_sum.c`.
+
+Step 5: provide ` gcc leafpad one_to_n_sum.c`
+
+Step 6: Write `ls -ltr`, which is used in Unix/Linux terminals to list files and directories with specific options.
+
+Step 7: To view the output use the command `./a.out`
+
