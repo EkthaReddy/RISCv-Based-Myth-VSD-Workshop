@@ -1,23 +1,25 @@
+# Day 1
+## Introduction of the workshop
 
-![Screenshot (966)](https://github.com/user-attachments/assets/9ff3c141-64bd-4df1-a155-1d216e09a23b)
-![Screenshot (945)](https://github.com/user-attachments/assets/8b90b60f-58d5-47b5-aa9b-c10c4c916579)
-![Screenshot (946)](https://github.com/user-attachments/assets/19793d57-ef6e-437a-83dc-5c6e601690e3)
-![Screenshot (947)](https://github.com/user-attachments/assets/9e7e6dc9-d0dc-43dd-83a6-95106ba01524)
-![Screenshot (948)](https://github.com/user-attachments/assets/f23e73e7-02b0-4f09-b381-a1512333681c)
-![Screenshot (949)](https://github.com/user-attachments/assets/6fb45915-3243-45a1-8584-cfd6fa211e01)
-![Screenshot (950)](https://github.com/user-attachments/assets/9858bb6b-8bd4-46cb-a990-e5e82790faf9)
-![Screenshot (951)](https://github.com/user-attachments/assets/e3dca741-19fe-47c6-b993-e99f04bea752)
-![Screenshot (952)](https://github.com/user-attachments/assets/6b1044d5-2c9a-4153-a6e2-b0859ad71715)
-![Screenshot (953)](https://github.com/user-attachments/assets/7cd31681-5c4e-48b2-8732-55302d148098)
-![Screenshot (954)](https://github.com/user-attachments/assets/8fdad85a-f3e6-4d6a-8bfb-4c6b3f870ba5)
-![Screenshot (955)](https://github.com/user-attachments/assets/4716fb70-8c14-4281-9214-296f4ea09525)
-![Screenshot (956)](https://github.com/user-attachments/assets/00ce0494-c21c-4df8-aa70-69f2d311fd7b)
-![Screenshot (957)](https://github.com/user-attachments/assets/129ea929-ba2a-4141-a9d3-96ba5f7a2ae3)
-![Screenshot (958)](https://github.com/user-attachments/assets/b8e5be7e-d989-4785-a84e-f574ef2ab4c7)
-![Screenshot (959)](https://github.com/user-attachments/assets/238a274c-cebb-4348-8026-49ee593e52ef)
-![Screenshot (960)](https://github.com/user-attachments/assets/238e549e-315b-4fe1-a23c-779dcd6a4125)
-![Screenshot (961)](https://github.com/user-attachments/assets/500f9701-a935-42fb-91e3-7d163f0222e3)
-![Screenshot (962)](https://github.com/user-attachments/assets/0f2c5b5d-b476-4f60-9a5b-045c3a5221cf)
-![Screenshot (963)](https://github.com/user-attachments/assets/47d7f7f0-cea4-4224-91dc-825615b2b7a0)
-![Screenshot (964)](https://github.com/user-attachments/assets/5cf5b64b-22ac-4387-87e5-2c3918903a7d)
-![Screenshot (965)](https://github.com/user-attachments/assets/c1c1ef58-229d-47d1-8056-60500eccb76b)
+In Day 1, it is detaily explained about how can the C code run on hardware.
+
+For the C program to run on system (hardware), the process is involved where C code result is compiled into the assembly language where the machine translates it into the hexadecimal format and then to binary format which is 0's and 1's. Then, the binary format helps to convert them into layout.
+
+All of this has to be done via interface, i.e., the HDL is used to create specification and then later the specification is implemented through RTL.
+
+The flowchart is such this:
+
+```
+
+C program -> C code result -> compile into assembly language -> convert into machine language (Binary format) -> Layout -> Hardware  
+                                                                                                                                     
+           |                                                                                                             |           
+           |                                                                                                             |           
+           |-------------------------------------------------------------------------------------------------------------|           
+                                                            |                                                                        
+                                                            |                                                                        
+                                                            |                                                                        
+                                                     -> Interface is used in this part 
+                                                     (HDL -> to create specification -> implement using RTL)
+```
+                                            
