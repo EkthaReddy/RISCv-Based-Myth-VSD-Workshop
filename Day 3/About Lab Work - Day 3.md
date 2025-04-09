@@ -61,78 +61,102 @@ A Combinational Circuit is a type of digital circuit where the output depends on
 - Encoders
 - Comparators
 
-Sure, Ektha! Here's a brief explanation about **Vectors in TL-Verilog**:
+**What is TL-Verilog?**
+
+**TL-Verilog (Transaction-Level Verilog)** is an abstraction layer over SystemVerilog that simplifies hardware design by separating functionality from timing. It helps structure designs better, especially for **combinational and pipelined logic**.
+
+It uses a clean syntax, focusing more on **what** the hardware should do rather than **how** it's done at the gate level.
+
+**2:1 Multiplexer (MUX 2:1) in TL-Verilog**
+
+ **Description:**
+A **2:1 multiplexer** selects **one of two data inputs** based on a **single control signal (`sel`)**.
+
+**TL-Verilog Code:**
+```tlv
+|main
+    @1
+        $out = $sel ? $in1 : $in0;
+```
+
+**Explanation:**
+- `@1`: Defines the pipeline stage (can be `@0` if no pipeline).
+- `$sel`: Select signal.
+- `$in0`, `$in1`: Input data lines.
+- `$out`: Output line.
+- The ternary operator (`? :`) chooses between `$in0` and `$in1` based on `$sel`.
 
 ---
 
-**What is TL-Verilog?**
+**4:1 Multiplexer (MUX 4:1) in TL-Verilog**
 
-**TL-Verilog (Transaction-Level Verilog)** is a **higher-level abstraction** of Verilog, designed for **hardware design and verification**, allowing more reusable and scalable designs using **pipelines, timing abstraction**, and **transactional modeling**.
+**Description:**
+A **4:1 MUX** selects one of four inputs based on **2-bit select lines (`sel[1:0]`)**.
+
+**TL-Verilog Code:**
+```tlv
+|main
+    @1
+        $out =
+            $sel == 2'b00 ? $in0 :
+            $sel == 2'b01 ? $in1 :
+            $sel == 2'b10 ? $in2 :
+                            $in3;
+```
+
+**Explanation:**
+- `$sel` is a 2-bit input that selects one of the four inputs.
+- Based on the value of `$sel`, the corresponding input is assigned to `$out`.
+
+---
+
+**Inverter in TL-Verilog**
+
+**Description:**
+An **inverter** is a NOT gate that **flips** the binary input.
+
+**TL-Verilog Code:**
+```tlv
+|main
+    @1
+        $out = ~$in;
+```
+
+**Explanation:**
+- `~$in`: Bitwise NOT (inverts the input signal).
+- `$out` gets the inverted value of `$in`.
 
 ---
 
 **Vectors in TL-Verilog**
 
-In TL-Verilog, **vectors** are similar to Verilog bit arrays (multi-bit signals), but the syntax is more abstract and clean.
+**Description:**
+A **vector** in TL-Verilog is a group of bits used to represent **multi-bit data** like binary numbers, buses, or signals.
 
-**Declaring a Vector (Wire or Signal)**
-
+**Declaring a 4-bit Vector Example:**
 ```tlv
-|my_scope
-    $my_vector[7:0] // 8-bit vector (wire/signal)
+$my_bus[3:0] = 4'b1010;
 ```
 
-- `my_vector` is an 8-bit wide signal.
-- Bit positions are defined using `[MSB:LSB]` (e.g., `[7:0]` for 8 bits).
-
-**Assigning a Value**
-
+**Using Vectors:**
 ```tlv
-/my_vector = 8'hA5   // Assign hex value A5 to my_vector
-```
-
-You can assign values like in Verilog:
-- Binary: `8'b10101010`
-- Hex: `8'hFF`
-- Decimal: `8'd255`
-
----
-
-**Accessing Vector Bits**
-
-```tlv
-/my_bit = /my_vector[3]     // Access bit 3 of my_vector
-/my_slice = /my_vector[7:4] // Access upper 4 bits
-```
-
----
-
-**Using in Pipelines**
-
-TL-Verilog supports pipelining natively, so you can do:
-
-```tlv
-|pipeline
+|main
     @1
-        $data_in[15:0]
-    @2
-        /data_out = /data_in + 16'd5
+        $sum[3:0] = $a[3:0] + $b[3:0];
 ```
 
-Here:
-- `@1`, `@2` represent pipeline stages.
-- `data_in` is declared as a 16-bit vector.
-- `data_out` is the result after processing in stage 2.
+**Explanation:**
+- `$my_bus[3:0]`: Declares a 4-bit vector.
+- Bit slicing and concatenation work similarly to SystemVerilog.
+- Vectors are very useful in designing **adders**, **multiplexers**, **ALUs**, etc.
 
 ---
 
-Summary
+**Summary Table:**
 
-| Feature          | TL-Verilog Syntax             |
-|------------------|-------------------------------|
-| Declare vector   | `$vec[7:0]`                   |
-| Assign value     | `/vec = 8'hAB`                |
-| Access bit       | `/vec[2]`                     |
-| Access slice     | `/vec[7:4]`                   |
-| Pipeline usage   | Use `@n` blocks with vectors  |
-
+| Component | TL-Verilog Usage                            | Purpose                                      |
+|-----------|----------------------------------------------|----------------------------------------------|
+| 2:1 MUX   | `$out = $sel ? $in1 : $in0;`                | Selects 1 of 2 inputs                        |
+| 4:1 MUX   | `case ($sel) ...` or nested ternary         | Selects 1 of 4 inputs                        |
+| Inverter  | `$out = ~$in;`                              | Inverts input bit                           |
+| Vector    | `$bus[3:0] = value;`                        | Handles multi-bit data                      |
