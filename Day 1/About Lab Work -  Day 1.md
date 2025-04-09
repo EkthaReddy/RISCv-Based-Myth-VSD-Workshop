@@ -7,6 +7,8 @@ For the C program to run on system (hardware), the process is involved where C c
 
 All of this has to be done via interface, i.e., the HDL is used to create specification and then later the specification is implemented through RTL.
 
+![image](https://github.com/user-attachments/assets/2bcfd890-afaa-4502-a849-50668bfe66d8)
+
 The flowchart is such this:
 
 ```
@@ -22,5 +24,5 @@ C program -> C code result -> compile into assembly language -> convert into mac
                                                      -> Interface is used in this part 
                                                      (HDL -> to create specification -> implement using RTL)
 ```
-                                            
-![image](https://github.com/user-attachments/assets/2bcfd890-afaa-4502-a849-50668bfe66d8)
+
+
