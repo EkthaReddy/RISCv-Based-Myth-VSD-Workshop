@@ -225,3 +225,29 @@ or else at 63rd do the multiplication by the bit x 2^(-63)
 > For risv the positive doubleword numbers are written by `0 to 2^63-1` and negative doubleword as `-1 to 2^(-63)`.
 
 Lets do the calculation in the virtual machine
+
+Type `vim unsignedHighestnum.c`, Vim is a screen-based text editor that is free, open-source, and based on the vi editor that was originally created for the Unix operating system. This command will open the code written on leafpad as `unsignedHighestnum.c`.
+
+The terminal that would get opened by using the `vim` command is:
+![Screenshot (954)](https://github.com/user-attachments/assets/075f8acc-5d27-427f-a029-f6b15f07e862)
+
+
+Type `ricv64-unknown-elf-gcc -ofast -mabi=lp64 -march=rv64i -o unsignedHighestnum.o unsignedHighestnum.c` then perform the spike simulation to debug `spike pk unsignedHighest.o`. This will give the answer: Chcek the picture below
+![Screenshot (955)](https://github.com/user-attachments/assets/b037daf5-11b9-4d0d-8ce0-27e66746cf8f)
+
+We can change the range here to `127` from `64`, it would give the same result.
+![Screenshot (958)](https://github.com/user-attachments/assets/95c22883-6642-4bcf-ab86-28071de1d6ef)
+
+With the `10` as range we would get the answer in result however with `-10` which is not in limit the output obtained will be `0`.
+![Screenshot (959)](https://github.com/user-attachments/assets/37850e2a-a285-4606-89be-57f24c52e6a2)
+![Screenshot (961)](https://github.com/user-attachments/assets/ed618ebf-90ae-485b-aadc-1ffd603210cb)
+
+![Screenshot (962)](https://github.com/user-attachments/assets/f22d004f-0ba2-4107-9e24-caf2fc61b583)
+
+For the **exercise** this is the code and result obtained:
+![Screenshot (964)](https://github.com/user-attachments/assets/3bbfd436-9c0a-4a8f-b8a3-c3ed9e9eadbf)
+![Screenshot (963)](https://github.com/user-attachments/assets/6a31a92b-c0dc-4c4b-bee9-eb7e5ffe8977)
+
+We can check the result again by stting the limit as `10` and `-10`
+![Screenshot (966)](https://github.com/user-attachments/assets/33569fe4-3ca0-4c59-86d2-8f600b1f7179)
+![Screenshot (965)](https://github.com/user-attachments/assets/19ec5306-f660-446b-8d63-7a0ddcb48256)
