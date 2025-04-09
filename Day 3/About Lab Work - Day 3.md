@@ -5,9 +5,6 @@ Makerchip is a platform that provides free and instant access to tools for circu
 
 The link for the lab work is given below:
 
-Links:
-
-
 |S NO.| Lab Name | Link for the assignment |
 |-----|----------|-------------------------|
 | 1. |Combinational Calculator | [Combinational Calculator in Makerchip](https://www.makerchip.com/sandbox/0jRfjhnQv/0JZhqnj)|
@@ -19,6 +16,8 @@ Links:
 |7.| Pipelined Sequential Calculator With Counter - with 2nd stage| [Pipelined Sequential Calculator With Counter - with 2nd stage](https://www.makerchip.com/sandbox/0jRfjhnQv/03lhpv8)|
 |8.| Counter| |
 |9.| Pythagoras Theorem 3 Dimensional|[Pythagoras Theorem 3 Dimensional in Makerchip](https://www.makerchip.com/sandbox/0jRfjhnQv/066hrJO)|
+
+> For the below I have referred to Online sources
 
 ## Boolean Operators
 
@@ -284,7 +283,7 @@ or
   $z = $a + $b;
 ```
 
-👉 You don’t need to rewrite the logic — only change the stage.
+👉 No need to rewrite the logic — only change the stage.
 
 ---
 
@@ -325,12 +324,9 @@ Same logic across different pipeline stages:
 | Pipeline Depth         | Shallow                         | Deeper (used in processors for freq)|
 | Complexity             | Less                            | More                                |
 
-✅ **Conclusion:**  
+ **Conclusion:**  
 Both compute the same `c`, but the 5-stage version spreads logic more thinly for **higher clock frequency**, which is **useful in performance-optimized systems** like **CPU pipelines**.
 
-Certainly, Ektha. Here's a professional and in-depth explanation of the requested TL-Verilog syntax topics, organized systematically for clarity and completeness.
-
----
 
 **1. Symbol Prefixes and Delimitation in TL-Verilog**
 
