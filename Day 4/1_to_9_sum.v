@@ -42,10 +42,108 @@
          //Program_counter
          $reset = *reset;
          
+         //$imem_rd_en = ~ $reset;
+         
          $pc = >>1$reset ? 0: //if reset is active assign to zero
                >>1$branch_from_before ? >>1$branch_to_target : // Or else, the branch taken 1 cycle ago should be activated for respective branch instruction
                >>1$pc + 32'd4; // Or else the pc must be incremented by 4 instruction
-   
+      @1   
+         //$imem_rd_addr[M4_IMEM_INDEX_CNT -1:0] = $pc[M4_IMEM_INDEX_CNT + 1:2];
+         
+         //Decoder
+         // For Instruction I
+         $is_i_instr = $instr[6:2] ==? 5'b0000x ||
+                       $instr[6:2] ==? 5'b001x0 ||
+                       $instr[6:2] ==? 5'b11001;
+                       
+         //For Instruction R
+         $is_r_instr = $instr[6:2] ==? 5'b011x0 ||
+                       $instr[6:2] ==? 5'b01011 ||
+                       $instr[6:2] ==? 5'b10100;
+         //For Instruction S
+         $is_s_instr = $instr[6:2] ==? 5'b0100x;
+                       
+         //For Instruction B
+         $is_b_instr = $instr[6:2] ==? 5'b11000;
+                       
+         //For Instruction J
+         $is_j_instr = $instr[6:2] ==? 5'b11011;
+         
+         //For Instruction U
+         $is_u_instr = $instr[6:2] ==? 5'b0x101;
+         
+         //Immediate field of Decoder
+         
+         $$imm[31:0] = $is_i_instr ? { {21{$instr[31]}}, $instr[30:20] } :
+                      $is_s_instr ? { {21{$instr[31]}}, $instr[30:25], $instr[11:18], $instr[7]}:
+                      $is_b_instr ? { {20{$instr[31]}}, $instr[7], $instr[30:25], $instr[11:18], 1'b0} :
+                      $is_u_instr ? { $instr[31], $instr[30:20], $instr[19:12], {12{1'b0}}} :
+                      $is_j_instr ? { {12{$instr[31]}}, $instr[19:12], $instr[20], $instr[30:25], $instr[24:21], 1'b0}:
+                      32'b0;
+                      
+         //Instruction Field Decode
+         
+         $rs2_valid = $is_r_instr || $is_s_instr || $is_b_instr;
+         $rs1_valid = $is_r_instr || $is_i_instr || $is_s_instr || $is_b_instr;
+         $funct7_valid = $is_r_instr;
+         $funct3_valid = $is_r_instr || $is_i_instr || $is_s_instr || $is_b_instr;
+         $rd_valid = $is_r_instr || $is_i_instr || $is_u_instr || $is_j_instr;
+         
+         $opcode[6:0] = $instr[6:0];
+         
+         ?$rs2_valid
+            $rs2_valid[4:0] = $instr[24:20];
+         
+         ?$rs1_valid
+            $rs1_valid[4:0] = $instr[19:15];
+         
+         ?$funct7_valid
+            $funct7_valid[6:0] = $instr[31:25];
+            
+         ?$funct3_valid
+            $funct3_valid[2:0] = $instr[14:12];
+            
+         ?$rd_valid
+            $rd_valid[4:0] = $instr[11:7];
+            
+         //To decode individual instruction   
+         $dec_bits[10:0] = {$funct7[5], $funct3, $opcode};
+         
+         $is_beq = $dec_bits ==? 11'bx_000_1100011;
+         $is_bne = $dec_bits ==? 11'bx_001_1100011;
+         $is_blt = $dec_bits ==? 11'bx_100_1100011;
+         $is_bge = $dec_bits ==? 11'bx_101_1100011;
+         $is_bltu = $dec_bits ==? 11'bx_110_1100011;
+         $is_bgeu = $dec_bits ==? 11'bx_111_1100011;
+         
+         $is_addi = $dec_bits ==? 11'bx_000_0010011;
+         
+         $is_add = $dec_bits ==? 11'b0_000_0110011;
+         
+         //Until the instrs are implemented, quiet down the warnings
+         
+         `BOGUS_USE($is_beq $is_bne $is_blt $is_bge $is_bltu $is_bgeu $is_addi $is_add);
+         
+         //Read function of register file
+         
+         $rf_rd_en1 = $rs1_valid;
+         $rf_rd_en2 = $rs2_valid;
+         
+         $rf_rd_index1[4:0] = $rs1[4:0];
+         $rf_rd_index2[4:0] = $rs2[4:0];
+         
+         $src1_value[31:0] = $rf_rd_data1[31:0];
+         $src2_value[31:0] = $rf_rd_data2[31:0];
+         
+         //ALU
+         $result[31:0] = $is_addi ? $src1_value + $imm:
+                         $is_add ? $src1_value + $src2_value:
+                         32'bx;
+                         
+         $rf_wr_en = $rd && $rd_valid;
+         $rf_wr_index[4:0] = $rd[4:0];
+         $rf_wr_data[31:0] = $result[31:0];
+         
    // Assert these to end simulation (before Makerchip cycle limit).
    *passed = *cyc_cnt > 40;
    *failed = 1'b0;
