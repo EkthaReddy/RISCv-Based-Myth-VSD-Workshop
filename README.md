@@ -1,1 +1,1 @@
-# RISCv-Based-Myth-VSD-WOrkshop
+# RISCv Based Myth VSD Workshop
