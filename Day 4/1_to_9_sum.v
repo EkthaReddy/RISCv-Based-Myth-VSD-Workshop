@@ -42,14 +42,20 @@
          //Program_counter
          $reset = *reset;
          
+         $imem_rd_en = ~ $reset;
+         
+         $pc[31:0] = >>1$reset ? 0: 
+               >>1$taken_br ? >>1$br_tgt_pc : 
+               >>1$pc + 32'd4; 
+         //if reset is active assign to zero
+         // Or else, the branch taken 1 cycle ago should be activated for respective branch instruction
+         // Or else the pc must be incremented by 4 instruction
          
          
-         $pc = >>1$reset ? 0: //if reset is active assign to zero
-               >>1$taken_br ? >>1$br_tgt_pc : // Or else, the branch taken 1 cycle ago should be activated for respective branch instruction
-               >>1$pc + 32'd4; // Or else the pc must be incremented by 4 instruction
-         
+         $imem_rd_addr[M4_IMEM_INDEX_CNT -1:0] = $pc[M4_IMEM_INDEX_CNT + 1:2];
          
       @1   
+         $instr[31:0] = $imem_rd_data[31:0];
          
          //Decoder
          // For Instruction I
@@ -75,8 +81,8 @@
          
          //Immediate field of Decoder
          
-         $$imm[31:0] = $is_i_instr ? { {21{$instr[31]}}, $instr[30:20] } :
-                      $is_s_instr ? { {21{$instr[31]}}, $instr[30:25], $instr[11:18], $instr[7]}:
+         $imm[31:0] = $is_i_instr ? { {21{$instr[31]}}, $instr[30:20] } :
+                      $is_s_instr ? { {21{$instr[31]}}, $instr[30:25], $instr[11:8], $instr[7]}:
                       $is_b_instr ? { {20{$instr[31]}}, $instr[7], $instr[30:25], $instr[11:18], 1'b0} :
                       $is_u_instr ? { $instr[31], $instr[30:20], $instr[19:12], {12{1'b0}}} :
                       $is_j_instr ? { {12{$instr[31]}}, $instr[19:12], $instr[20], $instr[30:25], $instr[24:21], 1'b0}:
@@ -93,19 +99,19 @@
          $opcode[6:0] = $instr[6:0];
          
          ?$rs2_valid
-            $rs2_valid[4:0] = $instr[24:20];
+            $rs2[4:0] = $instr[24:20];
          
          ?$rs1_valid
-            $rs1_valid[4:0] = $instr[19:15];
+            $rs1[4:0] = $instr[19:15];
          
          ?$funct7_valid
-            $funct7_valid[6:0] = $instr[31:25];
+            $funct7[6:0] = $instr[31:25];
             
          ?$funct3_valid
-            $funct3_valid[2:0] = $instr[14:12];
+            $funct3[2:0] = $instr[14:12];
             
          ?$rd_valid
-            $rd_valid[4:0] = $instr[11:7];
+            $rd[4:0] = $instr[11:7];
             
          //To decode individual instruction   
          $dec_bits[10:0] = {$funct7[5], $funct3, $opcode};
@@ -152,14 +158,16 @@
                      $is_blt ? (($src1_value < $src2_value) ^($src1_value[31]!=$src2_value[31])):
                      $is_bge ? (($src1_value >= $src2_value) ^($src1_value[31]!=$src2_value[31])):
                      $is_bltu ? ($src1_value < $src2_value):
-                     $is__bgeu ? ($src1_value >= $src2_value):
+                     $is_bgeu ? ($src1_value >= $src2_value): 1'b0):
                      1'b0;
                      
                      
          //Modify the $pc and add $$pc and $imm to the previous branch instruction ($br_tgt_pc).      
-         $br_tgt_pc = $pc + $imm;      
+         $br_tgt_pc[31:0] = $pc[31:0] + $imm[31:0];      
+         
+         
    // Assert these to end simulation (before Makerchip cycle limit).
-   *passed = *cyc_cnt > 40;
+   *passed = |cpu/xreg[10]>>5$value == (1+2+3+4+5+6+7+8+9);
    *failed = 1'b0;
    
    // Macro instantiations for:
@@ -169,7 +177,7 @@
    //  o CPU visualization
    |cpu
       m4+imem(@1)    // Args: (read stage)
-      //m4+rf(@1, @1)  // Args: (read stage, write stage) - if equal, no register bypass is required
+      m4+rf(@1, @1)  // Args: (read stage, write stage) - if equal, no register bypass is required
       //m4+dmem(@4)    // Args: (read/write stage)
 
    //m4+cpu_viz(@4)    // For visualisation, argument should be at least equal to the last stage of CPU logic. @4 would work for all labs.
