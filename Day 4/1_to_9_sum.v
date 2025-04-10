@@ -42,13 +42,14 @@
          //Program_counter
          $reset = *reset;
          
-         //$imem_rd_en = ~ $reset;
+         
          
          $pc = >>1$reset ? 0: //if reset is active assign to zero
                >>1$taken_br ? >>1$br_tgt_pc : // Or else, the branch taken 1 cycle ago should be activated for respective branch instruction
                >>1$pc + 32'd4; // Or else the pc must be incremented by 4 instruction
+         
+         
       @1   
-         //$imem_rd_addr[M4_IMEM_INDEX_CNT -1:0] = $pc[M4_IMEM_INDEX_CNT + 1:2];
          
          //Decoder
          // For Instruction I
@@ -153,6 +154,10 @@
                      $is_bltu ? ($src1_value < $src2_value):
                      $is__bgeu ? ($src1_value >= $src2_value):
                      1'b0;
+                     
+                     
+         //Modify the $pc and add $$pc and $imm to the previous branch instruction ($br_tgt_pc).      
+         $br_tgt_pc = $pc + $imm;      
    // Assert these to end simulation (before Makerchip cycle limit).
    *passed = *cyc_cnt > 40;
    *failed = 1'b0;
@@ -163,7 +168,7 @@
    //  o data memory
    //  o CPU visualization
    |cpu
-      //m4+imem(@1)    // Args: (read stage)
+      m4+imem(@1)    // Args: (read stage)
       //m4+rf(@1, @1)  // Args: (read stage, write stage) - if equal, no register bypass is required
       //m4+dmem(@4)    // Args: (read/write stage)
 
