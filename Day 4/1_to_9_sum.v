@@ -45,7 +45,7 @@
          //$imem_rd_en = ~ $reset;
          
          $pc = >>1$reset ? 0: //if reset is active assign to zero
-               >>1$branch_from_before ? >>1$branch_to_target : // Or else, the branch taken 1 cycle ago should be activated for respective branch instruction
+               >>1$taken_br ? >>1$br_tgt_pc : // Or else, the branch taken 1 cycle ago should be activated for respective branch instruction
                >>1$pc + 32'd4; // Or else the pc must be incremented by 4 instruction
       @1   
          //$imem_rd_addr[M4_IMEM_INDEX_CNT -1:0] = $pc[M4_IMEM_INDEX_CNT + 1:2];
@@ -144,6 +144,15 @@
          $rf_wr_index[4:0] = $rd[4:0];
          $rf_wr_data[31:0] = $result[31:0];
          
+         // Branch Instructions
+         $taken_br = $is_b_instr ?
+                     ($is_beq ? ($src1_value == $src2_value):
+                     $is_bne ? ($src1_value != $src2_value) :
+                     $is_blt ? (($src1_value < $src2_value) ^($src1_value[31]!=$src2_value[31])):
+                     $is_bge ? (($src1_value >= $src2_value) ^($src1_value[31]!=$src2_value[31])):
+                     $is_bltu ? ($src1_value < $src2_value):
+                     $is__bgeu ? ($src1_value >= $src2_value):
+                     1'b0;
    // Assert these to end simulation (before Makerchip cycle limit).
    *passed = *cyc_cnt > 40;
    *failed = 1'b0;
