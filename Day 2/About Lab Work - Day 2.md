@@ -267,3 +267,6 @@ Similarly, to view the binary value use `$vim firmware32.hex`
 
 ![Screenshot (1011)](https://github.com/user-attachments/assets/6b807ed7-d930-47b2-8693-47f22121a161)
 
+**That's all for Day 2 Lab**
+
+Go to [Day 3 lab](https://github.com/EkthaReddy/RISCv-Based-Myth-VSD-Workshop/blob/main/Day%203/About%20Lab%20Work%20-%20Day%203.md)
