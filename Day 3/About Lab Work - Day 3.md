@@ -504,3 +504,8 @@ Using a numeric literal like `$123` implies a misunderstanding between signal na
 | Stage            | `@n`                       | Denotes temporal stage (e.g., `@1`, `@2`)          |
 | Identifier Rules | Must not start with digit  | Letters/digits/underscores allowed                 |
 | Numeric Literals | `4'd10`, `16'hABCD`        | Used for constants, not prefixed with symbols      |
+
+
+**That's all for Day 3 Lab**
+
+Go to [Day 4 lab](https://github.com/EkthaReddy/RISCv-Based-Myth-VSD-Workshop/blob/main/Day%204/About%20Lab%20Work%20-%20Day%204.md)
