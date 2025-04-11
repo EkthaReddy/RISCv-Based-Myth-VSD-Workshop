@@ -254,4 +254,5 @@ We can check the result again by stting the limit as `10` and `-10`
 
 
 **That's all for Day 1 Lab**
-Go to [Day 2 lab](https://github.com/EkthaReddy/RISCv-Based-Myth-VSD-Workshop/tree/main/Day%202)
+
+Go to [Day 2 lab](https://github.com/EkthaReddy/RISCv-Based-Myth-VSD-Workshop/blob/main/Day%202/About%20Lab%20Work%20-%20Day%202.md)
