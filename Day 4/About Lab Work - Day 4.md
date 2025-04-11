@@ -4,7 +4,14 @@
 
 Designing of RISCv was done by using TL Verilog and Makerchip Platform
 
-[link for 1_to_n_sum.v Lab Work](https://myth.makerchip.com/sandbox/0gJflh798/0VmhxqD#)
+[link for 1_to_n_sum.v Lab Work](https://myth.makerchip.com/sandbox/0gJflh798/0VmhxqD#) Click on the Link to view the project.
+
+The output Diagram and waveform generated are shown below
+**Diagram** of the Lab Work on day 4
+![Diagram Of Day 4 Lab Work](https://github.com/user-attachments/assets/0200d479-6b9d-43ff-9b0b-49506ccfe314)
+
+**Waveform** of the Lab Work on Day 4
+![Waveform Of Day 4 Lab Work](https://github.com/user-attachments/assets/1180c9a8-ec60-4026-87b8-a00544de03ce)
 
 In this Lab, the detailed explanation and step by step process to implement the RISCv was discussed. Every blocks of the RISCv was explained and gave a guide on how to design each.
 
@@ -232,3 +239,191 @@ The 20-bit immediate is sign-extended and multiplied by 2, added to the PC to ge
 jal x1, 100         // x1 = PC + 4, PC = PC + 100
 jal x0, 200         // Unconditional jump (no return address saved)
 ```
+
+![Screenshot (971)](https://github.com/user-attachments/assets/4c9e662f-d1f9-446f-8955-8400033d1105)
+
+The code for it is:
+```
+$is_i_instr = $instr[6:2] ==? 5'b0000x ||
+                       $instr[6:2] ==? 5'b001x0 ||
+                       $instr[6:2] ==? 5'b11001;
+                       
+         //For Instruction R
+         $is_r_instr = $instr[6:2] ==? 5'b011x0 ||
+                       $instr[6:2] ==? 5'b01011 ||
+                       $instr[6:2] ==? 5'b10100;
+         //For Instruction S
+         $is_s_instr = $instr[6:2] ==? 5'b0100x;
+                       
+         //For Instruction B
+         $is_b_instr = $instr[6:2] ==? 5'b11000;
+                       
+         //For Instruction J
+         $is_j_instr = $instr[6:2] ==? 5'b11011;
+         
+         //For Instruction U
+         $is_u_instr = $instr[6:2] ==? 5'b0x101;
+```
+
+**Code Explanation**
+Let us take I type example to explain:
+For **I Type**, we can find I type at 5 locations
+![Screenshot (971)](https://github.com/user-attachments/assets/31f6c303-af37-406f-9ebb-15523e47fdac)
+Let us check by row wise.
+At the first row we can find $ I types, For the 1st two the `00` is same whereas the `000` and `001` is different for last bit position. So instead of writing `00_000` and `00_001` we can just take dont care at last bit position i.e., `00_00x`. Because we are using dont care the operator is being used as `==?`
+
+**Why Use ==? Instead of ==**
+`==?` allows for wildcard matching, useful when bits in an opcode group follow a pattern.
+
+For instance: 5'b0000x matches both 00000 and 00001.
+
+Similarly it is being followed for the rest of the instructions.
+
+## 3. Immediate Generator
+
+The **Immediate Generator** is a crucial component of a RISC-V processor responsible for **extracting and sign-extending immediate values** from the instruction word, depending on the **instruction format**. Immediate values are used in arithmetic operations, memory addressing, and control-flow instructions such as branches and jumps.
+
+In the RISC-V instruction set architecture (ISA), **immediate values** are located in different bit fields across various instruction formats:
+
+- **I-Type**
+- **S-Type**
+- **B-Type**
+- **U-Type**
+- **J-Type**
+
+![Screenshot (972)](https://github.com/user-attachments/assets/821fe9c6-d8c0-4493-a867-c6fd2555defa)
+
+
+**TL Verilog Code**
+```
+imm[31:0] = is_i_instr ? { {21{instr[31]}}, instr[30:20] } :
+            is_s_instr ? { {21{instr[31]}}, instr[30:25], instr[11:8], instr[7]} :
+            is_b_instr ? { {20{instr[31]}}, instr[7], instr[30:25], instr[11:8], 1'b0} :
+            is_u_instr ? { instr[31], instr[30:20], instr[19:12], {12{1'b0}} } :
+            is_j_instr ? { {12{instr[31]}}, instr[19:12], instr[20], instr[30:25], instr[24:21], 1'b0 } :
+            32'b0;
+```
+
+ Explanation by Instruction Type
+
+**I-Type Instructions**
+
+**Immediate Format:**
+```verilog
+{ {21{instr[31]}}, instr[30:20] }
+```
+- **Bits Used:** `instr[31:20]` (12 bits)
+- The most significant bit `instr[31]` is the sign bit.
+- `instr[31]` is sign-extended to 21 bits to produce a 32-bit signed immediate.
+- **Result:** A sign-extended 32-bit immediate.
+
+**S-Type Instructions**
+
+**Immediate Format:**
+```verilog
+{ {21{instr[31]}}, instr[30:25], instr[11:8], instr[7] }
+```
+- **Bits Used:**
+  - `instr[31:25]` (7 bits)
+  - `instr[11:7]` (5 bits)
+- Together, these form a 12-bit signed immediate.
+- The MSB `instr[31]` is sign-extended.
+
+**B-Type Instructions**
+
+**Immediate Format:**
+```verilog
+{ {20{instr[31]}}, instr[7], instr[30:25], instr[11:8], 1'b0 }
+```
+- **Bits Used (in order of position):**
+  - `instr[31]` (sign bit)
+  - `instr[7]` (bit 11 of immediate)
+  - `instr[30:25]` (bits 10 to 5)
+  - `instr[11:8]` (bits 4 to 1)
+  - Last bit is `0` (LSB), since branches target word-aligned addresses.
+- Combined, this forms a 13-bit signed immediate (with LSB = 0), sign-extended to 32 bits.
+
+**U-Type Instructions**
+
+**Immediate Format:**
+```verilog
+{ instr[31], instr[30:20], instr[19:12], {12{1'b0}} }
+```
+- **Bits Used:** `instr[31:12]` (20 bits)
+- Immediate is left-shifted by 12 bits (`{12{1'b0}}` padding at LSB).
+- No sign extension is needed.
+
+**J-Type Instructions**
+
+**Immediate Format:**
+```verilog
+{ {12{instr[31]}}, instr[19:12], instr[20], instr[30:25], instr[24:21], 1'b0 }
+```
+- **Bits Used:**
+  - `instr[31]` (sign bit)
+  - `instr[19:12]`, `instr[20]`, `instr[30:25]`, `instr[24:21]`
+  - LSB is always `0` to maintain alignment.
+- These fields are rearranged and sign-extended.
+
+**Default Case**
+If the instruction does not match any known format, the immediate is set to zero:
+```verilog
+32'b0;
+```
+
+Here’s a **professional and academic-style explanation** for the Register File read and write operations based on the provided code snippet:
+
+---
+
+## 3. Register File Operations in a RISC-V Processor
+
+The **Register File** in a RISC-V processor supports:
+- Dual-port **read** functionality (to fetch operands).
+- Single-port **write** functionality (to update results).
+
+This section describes the **read and write logic** used to interact with the register file based on input instruction fields (`rs1`, `rs2`, and `rd`), control signals, and data values.
+
+---
+
+**Read Operation**
+
+```verilog
+$rf_rd_en1 = $rs1_valid;
+$rf_rd_en2 = $rs2_valid;
+
+$rf_rd_index1[4:0] = $rs1[4:0];
+$rf_rd_index2[4:0] = $rs2[4:0];
+
+$src1_value[31:0] = $rf_rd_data1[31:0];
+$src2_value[31:0] = $rf_rd_data2[31:0];
+```
+
+ **Explanation:**
+- `$rs1_valid` and `$rs2_valid`: Control signals that indicate whether the instruction uses the source registers `rs1` and `rs2`.
+- `$rf_rd_en1` and `$rf_rd_en2`: Enable signals to initiate a read from the register file for `rs1` and `rs2`.
+- `$rf_rd_index1` and `$rf_rd_index2`: Index selectors for reading the values from the register file. These are 5-bit fields because the RISC-V ISA supports 32 registers (2⁵ = 32).
+- `$rf_rd_data1` and `$rf_rd_data2`: The actual 32-bit register data read from the register file.
+- `$src1_value` and `$src2_value`: These values hold the operand data used by the ALU or other logic units in the datapath.
+
+This enables the processor to fetch operands for any instruction that requires register-based computation.
+
+---
+
+ **3.2 Write Operation**
+
+```verilog
+$rf_wr_en = $rd && $rd_valid;
+$rf_wr_index[4:0] = $rd[4:0];
+$rf_wr_data[31:0] = $result[31:0];
+```
+
+ **Explanation:**
+- `$rd`: Destination register field from the instruction.
+- `$rd_valid`: Control signal indicating that the instruction writes to a register.
+- `$rf_wr_en`: This signal is asserted only if `$rd_valid` is true and a valid destination register (`rd`) is provided. This ensures no write happens if the instruction does not produce a result (e.g., store, branch).
+- `$rf_wr_index`: Specifies the destination register index to which the result will be written.
+- `$rf_wr_data`: The 32-bit result computed by the ALU or load data from memory is written to the register file.
+
+> **Note:** Register x0 (index 0) in RISC-V is hardwired to zero. It should not be overwritten. A conditional check (`$rd != 0`) must be added in the implementation to enforce this constraint.
+
+---
