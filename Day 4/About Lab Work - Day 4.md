@@ -611,4 +611,5 @@ is_bgeu = dec_bits ==? 11'bx_111_1100011;
 This decoding ensures the correct branch instruction is identified based on RISC-V encoding.
 
 > Lastly create the testbench by using
->    *passed = |cpu/xreg[10]>>5$value == (1+2+3+4+5+6+7+8+9);
+> 
+> *passed = |cpu/xreg[10]>>5$value == (1+2+3+4+5+6+7+8+9);
