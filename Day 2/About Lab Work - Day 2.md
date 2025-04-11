@@ -11,6 +11,7 @@ ABIs are essential for ensuring **binary compatibility**—allowing pre-compiled
 **ABI Interface Levels**
 
 The ABI can be understood at various levels, each critical for software development, compiler design, and OS interaction.
+
 ![Screenshot (992)](https://github.com/user-attachments/assets/fbcf33f3-8eac-4d36-a045-929a83606c66)
 
 **Processor Instruction Set Architecture (ISA)**
@@ -28,6 +29,7 @@ This Day 2 lab explaned clearly the 3 question, which were:
 
 So, let us view each question one by one:
 For the **1st one**,
+
 ![Uploading Screenshot (995).png…]()
 
 The main reason is that the source register value is 5 bit long. Which are same for every instruction types. So, according to the formula 2^n = 2^5 = 32 bits.
@@ -42,6 +44,7 @@ In a 32-bit architecture, memory addresses are also 32 bits wide. This allows th
 for the **2nd one**,
 It is because of the interface. Interface is used to provide efficient functionality of the operation. At this level the other constraints like timimg, routing, etc are ignored.
 For the Application program to run on hardware, we need interface. This interface runs on different levels.
+
 ![Screenshot (992)](https://github.com/user-attachments/assets/f3e839b1-a421-41c4-9623-c96d8bd8bfbf)
 
 For the **3rd one**,
@@ -210,12 +213,15 @@ First write the C program on the leafpad then save as `1to9_custom.c`. Open term
 ![Screenshot (1015)](https://github.com/user-attachments/assets/a4123bbe-53b7-42b1-8997-5d2bc819cca6)
 
 Then again write the code for [load.S] and give this command `$leafpad load.S`
+
 ![Screenshot (1016)](https://github.com/user-attachments/assets/61e2aa55-8cee-4373-81d4-1d0f17a47d54)
 
 Then to view the code give `$cat 1to9_custom.c` then `$cat load.S`
+
 ![Screenshot (1003)](https://github.com/user-attachments/assets/f58f9eee-0375-428c-82d4-88676d3037ad)
 
 Provide the command `$riscv64-unknown-elf-gcc -ofast -mabi=lp64 -march=rv64i -o 1to9_custom.o 1to9_custom.c load.S` then $`spike pk 1to9_custom.o` to debug. To view the main instructions and assemly language give `$riscv64-unknown-elf-objdump -d 1to9_custom.o | less`
+
 ![Screenshot (1014)](https://github.com/user-attachments/assets/ff2f03de-4d85-4238-bc12-4b207005638d)
 
 Now let us view the verilog code and testbench for the **RISCV**
@@ -230,25 +236,34 @@ To get the listing under collaterals give `$ls -ltr`
 Then access labs from `$cd labs`
 
 Again go to listing `$ls -ltr` and type `$vim picorv32.v` to get the Verilog code for the RISCV. Or else we can use this aswell `$less picorv32.v
+
 ![Screenshot (1006)](https://github.com/user-attachments/assets/75dd72b4-4af1-4bab-9319-7b86df24d3fa)
 
 To view testbench `$vim testbench.v`
+
 ![Screenshot (1007)](https://github.com/user-attachments/assets/88520eea-678d-4f5e-b452-b24ed159ba59)
+
 The hex code can be see here in testbench 
+
 ![Screenshot (1008)](https://github.com/user-attachments/assets/d8d7c98b-7087-48a8-ae43-6d60e8853154)
 
 Again to view the instructions commanded to get the ouput `$vim rv32im.sh`
+
 ![Screenshot (1009)](https://github.com/user-attachments/assets/d10161e3-f1c8-43a3-b192-421701c3b81f)
 
 We can change the number of count from 2 to 3 by changing directly through using the vm `$vim 1to9_custom.c`
+
 ![Screenshot (1012)](https://github.com/user-attachments/assets/f794c56f-0cc3-4130-aea1-e715bdb42ecb)
 
 To get the outputof updated C code type `$./rv32im.sh`
+
 ![Screenshot (1013)](https://github.com/user-attachments/assets/6cbfe0f6-f663-447d-b30f-bcdce5798c75)
 
 View listing `$ls -ltr` to get the hexadecimal value from assembly code by using command `$vim firmware.hex`. 
+
 ![Screenshot (1010)](https://github.com/user-attachments/assets/2d0324f2-4ddf-49cd-a00f-6f4a27df69c4)
 
 Similarly, to view the binary value use `$vim firmware32.hex`
+
 ![Screenshot (1011)](https://github.com/user-attachments/assets/6b807ed7-d930-47b2-8693-47f22121a161)
 
