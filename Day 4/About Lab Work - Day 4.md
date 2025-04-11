@@ -8,14 +8,17 @@ Designing of RISCv was done by using TL Verilog and Makerchip Platform
 
 The output Diagram and waveform generated are shown below
 **Diagram** of the Lab Work on day 4
+
 ![Diagram Of Day 4 Lab Work](https://github.com/user-attachments/assets/0200d479-6b9d-43ff-9b0b-49506ccfe314)
 
 **Waveform** of the Lab Work on Day 4
+
 ![Waveform Of Day 4 Lab Work](https://github.com/user-attachments/assets/1180c9a8-ec60-4026-87b8-a00544de03ce)
 
 In this Lab, the detailed explanation and step by step process to implement the RISCv was discussed. Every blocks of the RISCv was explained and gave a guide on how to design each.
 
 Let us first see the Block Diagram:
+
 ![Screenshot (968)](https://github.com/user-attachments/assets/50da57b1-b868-4b6c-8fbd-508df11bcd35)
 
 Let us view the Blocks:
@@ -613,3 +616,8 @@ This decoding ensures the correct branch instruction is identified based on RISC
 > Lastly create the testbench by using
 > 
 > *passed = |cpu/xreg[10]>>5$value == (1+2+3+4+5+6+7+8+9);
+
+
+**That's all for Day 4 Lab**
+
+Go to [Day 5 lab](https://github.com/EkthaReddy/RISCv-Based-Myth-VSD-Workshop/blob/main/Day%205/About%20Lab%20Work%20-%20Day%205.md)
