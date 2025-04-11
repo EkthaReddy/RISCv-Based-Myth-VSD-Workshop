@@ -251,3 +251,7 @@ For the **exercise** this is the code and result obtained:
 We can check the result again by stting the limit as `10` and `-10`
 ![Screenshot (965)](https://github.com/user-attachments/assets/19ec5306-f660-446b-8d63-7a0ddcb48256)
 ![Screenshot (966)](https://github.com/user-attachments/assets/33569fe4-3ca0-4c59-86d2-8f600b1f7179)
+
+
+**That's all for Day 1 Lab**
+Go to [Day 2 lab](https://github.com/EkthaReddy/RISCv-Based-Myth-VSD-Workshop/tree/main/Day%202)
