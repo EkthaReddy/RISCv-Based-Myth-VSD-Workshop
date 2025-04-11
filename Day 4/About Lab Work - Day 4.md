@@ -4,7 +4,7 @@
 
 Designing of RISCv was done by using TL Verilog and Makerchip Platform
 
-[link for 1_to_n_sum.v Lab Work](https://myth.makerchip.com/sandbox/0gJflh798/0VmhxqD#) Click on the Link to view the project.
+[link for 1_to_n_sum.v Lab Work](https://myth.makerchip.com/sandbox/0gJflh798/0VmhxqD#). Click on the Link to view the project.
 
 The output Diagram and waveform generated are shown below
 **Diagram** of the Lab Work on day 4
