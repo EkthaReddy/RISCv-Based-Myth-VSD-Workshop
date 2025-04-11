@@ -1,4 +1,4 @@
-![Screenshot (992)](https://github.com/user-attachments/assets/04e4bafd-260c-4d87-abfa-f0a098b42a16)# Day 2
+# Day 2
 
 ### Application Binary Interface (ABI) 
 
