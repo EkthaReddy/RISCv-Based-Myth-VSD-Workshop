@@ -2,7 +2,7 @@
 
 ## About the piplelined RISCV
 
-[Link for the Lab Work on Day 5](https://myth.makerchip.com/sandbox/0BBfVh1qz/0y8hrPy)
+[Link for the Lab Work on Day 5](https://myth.makerchip.com/sandbox/0BBfVh1qz/0y8hrPy) Click on the Link to view the project
 
 The output of the Lab Work Day 5
 
