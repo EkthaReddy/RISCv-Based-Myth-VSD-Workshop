@@ -427,3 +427,188 @@ $rf_wr_data[31:0] = $result[31:0];
 > **Note:** Register x0 (index 0) in RISC-V is hardwired to zero. It should not be overwritten. A conditional check (`$rd != 0`) must be added in the implementation to enforce this constraint.
 
 ---
+
+## Instruction Field Decode
+In a RISC-V processor, not all instruction types utilize all instruction fields. The control logic must determine which fields are relevant based on the decoded instruction type. This section describes how control signals are derived to indicate which fields are valid for use in the datapath and register file.
+![Screenshot (984)](https://github.com/user-attachments/assets/7c5916ad-d691-4d9c-bb91-1166a61a2264)
+
+```
+$rs2_valid = $is_r_instr || $is_s_instr || $is_b_instr;
+         $rs1_valid = $is_r_instr || $is_i_instr || $is_s_instr || $is_b_instr;
+         $funct7_valid = $is_r_instr;
+         $funct3_valid = $is_r_instr || $is_i_instr || $is_s_instr || $is_b_instr;
+         $rd_valid = $is_r_instr || $is_i_instr || $is_u_instr || $is_j_instr;
+         
+         $opcode[6:0] = $instr[6:0];
+```
+Here, we need to assign the instruction types for the rs1, rs2, funct3, funct7 and rd.
+
+Here's an academically styled and **clean explanation** of the given Verilog-style extraction logic. This logic block is part of the **Instruction Decoder** in a RISC-V processor. It extracts the appropriate fields from the 32-bit instruction **only if** those fields are **valid** for the current instruction type.
+
+---
+
+## 5. Instruction Field Extraction (Conditional Decoding)
+
+In the RISC-V architecture, each instruction type utilizes a subset of the 32-bit instruction word. The processor must **conditionally extract** specific fields like source registers, destination registers, and function bits based on the **type of instruction** being decoded.
+
+The following code extracts these fields **only if** they are valid for the instruction type.
+
+
+
+**Code and Explanation**
+
+```
+?$rs2_valid
+   $rs2[4:0] = $instr[24:20];
+```
+- **Explanation**: If `$rs2_valid` is asserted (true), the **second source register index** is extracted from bits [24:20] of the instruction.  
+- This applies to **R-type**, **S-type**, and **B-type** instructions.
+
+---
+
+```
+?$rs1_valid
+   $rs1[4:0] = $instr[19:15];
+```
+- **Explanation**: If `$rs1_valid` is asserted, the **first source register index** is extracted from bits [19:15].  
+- This is used in **R**, **I**, **S**, and **B-type** instructions.
+
+---
+
+```
+?$funct7_valid
+   $funct7[6:0] = $instr[31:25];
+```
+- **Explanation**: If `$funct7_valid` is asserted, the **7-bit funct7 field** is extracted from bits [31:25].  
+- This field is **only** relevant for **R-type** instructions (e.g., to differentiate between `ADD` and `SUB`).
+
+---
+
+```
+?$funct3_valid
+   $funct3[2:0] = $instr[14:12];
+```
+- **Explanation**: If `$funct3_valid` is asserted, the **3-bit funct3 field** is extracted from bits [14:12].  
+- It is used in **R**, **I**, **S**, and **B-type** instructions to distinguish between different operations (e.g., `BEQ` vs. `BNE`).
+
+---
+
+```
+?$rd_valid
+   $rd[4:0] = $instr[11:7];
+```
+- **Explanation**: If `$rd_valid` is asserted, the **destination register index** is extracted from bits [11:7].  
+- This applies to **R**, **I**, **U**, and **J-type** instructions where a result is written to a register.
+
+
+
+
+
+## 6. Instruction Decoding Using Decoded Bits (`dec_bits`)
+
+In order to simplify instruction detection, specific parts of the instruction are **grouped and encoded** into a smaller vector called `dec_bits`. This allows for **compact and efficient pattern matching** to identify the instruction type.
+
+
+![Screenshot (985)](https://github.com/user-attachments/assets/5052d2ce-2d4a-40f1-b3a6-a04378d4c50c)
+
+Here write in format of funct7, funct3 and opcode.
+```
+$dec_bits[10:0] = {$funct7[5], $funct3, $opcode};
+         
+         $is_beq = $dec_bits ==? 11'bx_000_1100011;
+         $is_bne = $dec_bits ==? 11'bx_001_1100011;
+         $is_blt = $dec_bits ==? 11'bx_100_1100011;
+         $is_bge = $dec_bits ==? 11'bx_101_1100011;
+         $is_bltu = $dec_bits ==? 11'bx_110_1100011;
+         $is_bgeu = $dec_bits ==? 11'bx_111_1100011;
+         
+         $is_addi = $dec_bits ==? 11'bx_000_0010011;
+         
+         $is_add = $dec_bits ==? 11'b0_000_0110011;
+```
+This groups together important fields for identifying an instruction:
+
+funct7[5] – the 6th bit of the funct7 field (used in distinguishing add vs sub).
+
+funct3 – 3-bit function code that helps classify subtypes of instructions.
+
+opcode – 7-bit primary operation code that identifies the main instruction type.
+
+**BOGUS_USE Macro**
+
+```
+`BOGUS_USE($is_beq $is_bne $is_blt $is_bge $is_bltu $is_bgeu $is_addi $is_add);
+```
+
+- **Explanation**: This macro is used to **suppress unused variable warnings** during compilation or simulation.  
+- In early development stages, some instructions may be **declared but not yet implemented**, so to avoid compiler warnings, the `BOGUS_USE` macro references them.
+
+## Branch Instructions
+Branch Instructions control the flow of execution in a program. They compare values in registers and decide whether to jump to a different instruction address or continue sequentially. They are conditional, meaning the branch is taken only when a specific condition is satisfied.
+
+These instructions belong to the B-type format in RISC-V.
+
+Perfect, Ektha! Here's a **professional GitHub-style Markdown documentation** section for **Branch Instructions** in your RISC-V single-cycle processor project. You can add this to your `README.md` or a file like `docs/branch_instructions.md`.
+
+---
+
+## Branch Instructions
+
+Branch instructions control the flow of execution by conditionally updating the Program Counter (PC). In a RISC-V single-cycle processor, these instructions determine whether the next instruction should come from the next sequential address (`PC + 4`) or a branch target address (`PC + immediate`).
+
+**Supported Branch Instructions**
+
+| Instruction | Mnemonic | Description                          | Format | Condition                                   |
+|-------------|----------|--------------------------------------|--------|---------------------------------------------|
+| `BEQ`       | Branch if Equal         | Branch if `rs1 == rs2`             | B-type | `PC = PC + imm` if `rs1 == rs2`             |
+| `BNE`       | Branch if Not Equal     | Branch if `rs1 != rs2`             | B-type | `PC = PC + imm` if `rs1 != rs2`             |
+| `BLT`       | Branch if Less Than     | Signed comparison                  | B-type | `PC = PC + imm` if `rs1 < rs2`              |
+| `BGE`       | Branch if Greater Equal | Signed comparison                  | B-type | `PC = PC + imm` if `rs1 >= rs2`             |
+| `BLTU`      | Branch if Less Than (U) | Unsigned comparison                | B-type | `PC = PC + imm` if `rs1 < rs2` (unsigned)   |
+| `BGEU`      | Branch if GE (Unsigned) | Unsigned comparison                | B-type | `PC = PC + imm` if `rs1 >= rs2` (unsigned)  |
+
+---
+
+
+```verilog
+// Branch Control Signal Generation
+taken_br = is_b_instr ?
+             (is_beq  ? (src1_value == src2_value) :
+              is_bne  ? (src1_value != src2_value) :
+              is_blt  ? ((src1_value < src2_value) ^ (src1_value[31] != src2_value[31])) :
+              is_bge  ? ((src1_value >= src2_value) ^ (src1_value[31] != src2_value[31])) :
+              is_bltu ? (src1_value < src2_value) :
+              is_bgeu ? (src1_value >= src2_value) :
+              1'b0) :
+           1'b0;
+```
+
+**Explanation**
+
+- `is_b_instr` checks if the current instruction is a branch instruction.
+- Based on specific instruction decoding (`is_beq`, `is_bne`, etc.), the condition is evaluated.
+- For signed comparisons (`BLT`, `BGE`), an XOR operation with the sign bits is used to handle 2's complement edge cases correctly.
+- If the condition is met, `taken_br` is set to `1`, and the PC will be updated to the **branch target address**.
+
+---
+![Screenshot (986)](https://github.com/user-attachments/assets/3ae83174-66d1-4a80-99b0-08a2ccae67f7)
+
+**Instruction Decode Bits**
+
+Branch instruction detection is based on opcode, `funct3`, and the MSB of `funct7`.
+
+```verilog
+dec_bits[10:0] = {funct7[5], funct3, opcode};
+
+is_beq  = dec_bits ==? 11'bx_000_1100011;
+is_bne  = dec_bits ==? 11'bx_001_1100011;
+is_blt  = dec_bits ==? 11'bx_100_1100011;
+is_bge  = dec_bits ==? 11'bx_101_1100011;
+is_bltu = dec_bits ==? 11'bx_110_1100011;
+is_bgeu = dec_bits ==? 11'bx_111_1100011;
+```
+
+This decoding ensures the correct branch instruction is identified based on RISC-V encoding.
+
+> Lastly create the testbench by using
+>    *passed = |cpu/xreg[10]>>5$value == (1+2+3+4+5+6+7+8+9);
