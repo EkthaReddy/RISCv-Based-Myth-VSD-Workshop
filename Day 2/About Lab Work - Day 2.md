@@ -199,64 +199,56 @@ jal x1, label  // Jump to label, save return addr in x1
 In summary, the **ABI is a crucial contract** between compiled applications and the environment in which they execute. Understanding the ABI is essential for developers working with **low-level programming**, **compilers**, **operating systems**, or **hardware platforms**. It guarantees that different components of a system can interact correctly and efficiently at the binary level.
 
 
+### C Program Using ASM Language
 
+**ASM (Assembly Language)** is a low-level programming language that provides a direct correspondence between the instructions in the code and the instructions executed by a computer's CPU. It is one step above machine code (binary), and one step below high-level languages like C or Python.
 
+Let us see on **Lab Work of Day 2**,
 
+First write the C program on the leafpad then save as `1to9_custom.c`. Open terminal and give the command `$leafpad 1to9_custom.c`.
 
+![Screenshot (1015)](https://github.com/user-attachments/assets/a4123bbe-53b7-42b1-8997-5d2bc819cca6)
 
+Then again write the code for [load.S] and give this command `$leafpad load.S`
+![Screenshot (1016)](https://github.com/user-attachments/assets/61e2aa55-8cee-4373-81d4-1d0f17a47d54)
 
+Then to view the code give `$cat 1to9_custom.c` then `$cat load.S`
+![Screenshot (1003)](https://github.com/user-attachments/assets/f58f9eee-0375-428c-82d4-88676d3037ad)
 
+Provide the command `$riscv64-unknown-elf-gcc -ofast -mabi=lp64 -march=rv64i -o 1to9_custom.o 1to9_custom.c load.S` then $`spike pk 1to9_custom.o` to debug. To view the main instructions and assemly language give `$riscv64-unknown-elf-objdump -d 1to9_custom.o | less`
+![Screenshot (1014)](https://github.com/user-attachments/assets/ff2f03de-4d85-4238-bc12-4b207005638d)
 
+Now let us view the verilog code and testbench for the **RISCV**
+Give `$cd`
 
+Then clone the repository to get the contents downloaded on the vm to access the RISCv Code in Verilog Language, to do so give `$git clone https://github.com/kunalg123/riscv_workshop_collaterals.git`
 
+Then give `$cd riscv_workshop_collaterals`
 
+To get the listing under collaterals give `$ls -ltr`
 
+Then access labs from `$cd labs`
 
+Again go to listing `$ls -ltr` and type `$vim picorv32.v` to get the Verilog code for the RISCV. Or else we can use this aswell `$less picorv32.v
+![Screenshot (1006)](https://github.com/user-attachments/assets/75dd72b4-4af1-4bab-9319-7b86df24d3fa)
 
+To view testbench `$vim testbench.v`
+![Screenshot (1007)](https://github.com/user-attachments/assets/88520eea-678d-4f5e-b452-b24ed159ba59)
+The hex code can be see here in testbench 
+![Screenshot (1008)](https://github.com/user-attachments/assets/d8d7c98b-7087-48a8-ae43-6d60e8853154)
 
+Again to view the instructions commanded to get the ouput `$vim rv32im.sh`
+![Screenshot (1009)](https://github.com/user-attachments/assets/d10161e3-f1c8-43a3-b192-421701c3b81f)
 
+We can change the number of count from 2 to 3 by changing directly through using the vm `$vim 1to9_custom.c`
+![Screenshot (1012)](https://github.com/user-attachments/assets/f794c56f-0cc3-4130-aea1-e715bdb42ecb)
 
+To get the outputof updated C code type `$./rv32im.sh`
+![Screenshot (1013)](https://github.com/user-attachments/assets/6cbfe0f6-f663-447d-b30f-bcdce5798c75)
 
-`leafpad 1to9_custom.c`
+View listing `$ls -ltr` to get the hexadecimal value from assembly code by using command `$vim firmware.hex`. 
+![Screenshot (1010)](https://github.com/user-attachments/assets/2d0324f2-4ddf-49cd-a00f-6f4a27df69c4)
 
-`leafpad load.S`
+Similarly, to view the binary value use `$vim firmware32.hex`
+![Screenshot (1011)](https://github.com/user-attachments/assets/6b807ed7-d930-47b2-8693-47f22121a161)
 
-`cat 1to9_custom.c`
-
-`cat load.S`
-
-`riscv64-unknown-elf-gcc -ofast -mabi=lp64 -march=rv64i -o 1to9_custom.o 1to9_custom.c load.S`
-
-`spike pk 1to9_custom.o`
-
-`riscv64-unknown-elf-objdump -d 1to9_custom.o | less`
-
-`cd`
-
-`git clone https://github.com/kunalg123/riscv_workshop_collaterals.git`
-
-`cd riscv_workshop_collaterals`
-
-`ls -ltr`
-
-`cd labs`
-
-` ls -ltr`
-
-`vim picorv32.v`
-
-`less picorv32.v
-
-`vim testbench.v`
-
-`vim rv32im.sh`
-
-`vim 1to9_custom.c`
-
-`./rv32im.sh`
-
-`ls -ltr`
-
-`vim firmware.hex`
-
-`vim firmware32.hex`
